@@ -1,0 +1,52 @@
+<div :class="$style.spread">
+  <vtk-view :client="client" :viewId="state.view" :sizeChange="layoutChange" />
+
+  <v-layout class="mx-4 my-2" align-center :class="$style.viewToolbar">
+    <v-select
+      label="Field"
+      :value="state.field"
+      :items="state.fields"
+      @change="updateColorBy({ name: 'surface', field: $event })"
+      hide-details
+      style="max-width: 300px;"
+    />
+
+    <v-spacer />
+
+    <v-btn icon @click="colorRescale('surface')">
+      <v-icon>{{ $vuetify.icons.rescaleColor }}</v-icon>
+    </v-btn>
+
+    <v-menu offset-y>
+      <template v-slot:activator="{ on }">
+        <v-btn icon v-on="on">
+          <v-icon>{{ $vuetify.icons.colorMap }}</v-icon>
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-tile
+          v-for="(mode, index) in colorModes"
+          :key="index"
+          :data-value="mode.value"
+          @click="activateColorMode"
+        >
+          <v-list-tile-title>
+            <v-icon>
+              {{ mode.value == colorMode ? $vuetify.icons.selected : $vuetify.icons.unselected }}
+            </v-icon>
+            {{ mode.text }}
+          </v-list-tile-title>
+        </v-list-tile>
+      </v-list>
+    </v-menu>
+
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on }">
+        <v-btn icon v-on="on" @click="resetCamera(state.view)">
+          <v-icon>{{ $vuetify.icons.resetCamera }}</v-icon>
+        </v-btn>
+      </template>
+      <span>Reset camera</span>
+    </v-tooltip>
+  </v-layout>
+</div>

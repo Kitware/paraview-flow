@@ -1,0 +1,84 @@
+<v-toolbar clipped-left app>
+  <img
+    :src="logo"
+    :class="$style.logo"
+  />
+
+  <v-spacer />
+
+  <v-progress-linear
+    indeterminate
+    :class="$style.progress"
+    :active="!!busyCount"
+    height="3"
+  />
+
+  <v-icon>{{ $vuetify.icons.time }}</v-icon>
+  <v-slider
+    :value="time"
+    @input="updateTime"
+    :min="timeMin"
+    :max="timeMax"
+    step="1"
+
+    hide-details
+    class="mx-2"
+    style="max-width: 200px;"
+  />
+   <v-text-field
+    type="number"
+    :min="timeMin"
+    :max="timeMax"
+    step="1"
+
+    :value="time"
+    @input="updateTime"
+
+    hide-details
+    class="text-xs-center mx-1"
+    style="max-width: 40px;"
+  />
+
+  <v-btn-toggle
+    :value="viewAvailable"
+    @change="updateViewAvailable"
+
+    mandatory
+    multiple
+    class="ml-3"
+    :class="$style.thinBorder"
+  >
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on }">
+        <v-btn flat v-on="on" value="surface">
+          <v-icon>{{ $vuetify.icons.surface }}</v-icon>
+        </v-btn>
+      </template>
+      <span>Surface</span>
+    </v-tooltip>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on }">
+        <v-btn flat v-on="on" value="sub-surface">
+          <v-icon>{{ $vuetify.icons.subSurface }}</v-icon>
+        </v-btn>
+      </template>
+      <span>Sub-Surface</span>
+    </v-tooltip>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on }" value="water-table">
+        <v-btn flat v-on="on">
+          <v-icon>{{ $vuetify.icons.waterTable }}</v-icon>
+        </v-btn>
+      </template>
+      <span>Water table</span>
+    </v-tooltip>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on }" value="water-balance">
+        <v-btn flat v-on="on">
+          <v-icon>{{ $vuetify.icons.waterBalance }}</v-icon>
+        </v-btn>
+      </template>
+      <span>Water balance</span>
+    </v-tooltip>
+  </v-btn-toggle>
+</v-toolbar>

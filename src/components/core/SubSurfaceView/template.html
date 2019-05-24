@@ -1,0 +1,64 @@
+<div :class="$style.spread">
+  <vtk-view
+    :client="client"
+    :viewId="state.view"
+    :sizeChange="layoutChange"
+  />
+
+  <v-layout class="mx-4 my-2" align-center :class="$style.viewToolbar">
+    <v-select
+      label="Field"
+      :value="state.field"
+      :items="state.fields"
+      @change="updateColorBy({ name: 'subsurface', field: $event })"
+      hide-details
+      style="max-width: 300px;"
+    />
+    <v-spacer />
+    <v-btn-toggle
+      v-model="rescaleMode"
+      mandatory
+      class="mx-3"
+      :class="$style.thinBorder"
+    >
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn flat v-on="on">
+            <v-icon>{{ $vuetify.icons.localRescale }}</v-icon>
+          </v-btn>
+        </template>
+        <span>Local rescale</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn flat v-on="on">
+            <v-icon>{{ $vuetify.icons.globalRescale }}</v-icon>
+          </v-btn>
+        </template>
+        <span>Rescale through time</span>
+      </v-tooltip>
+    </v-btn-toggle>
+
+    <v-slider
+      :value="sliceIdx"
+      @change="updateSliceIdx"
+
+      :min="voi[4]"
+      :max="voi[5] - 1"
+      step="1"
+    />
+
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on }">
+        <v-btn
+          icon
+          v-on="on"
+          @click="resetCamera(state.view)"
+        >
+          <v-icon>{{ $vuetify.icons.resetCamera }}</v-icon>
+        </v-btn>
+      </template>
+      <span>Reset camera</span>
+    </v-tooltip>
+  </v-layout>
+</div>

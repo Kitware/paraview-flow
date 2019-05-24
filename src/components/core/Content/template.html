@@ -1,0 +1,20 @@
+<v-content :class="$style.appContent">
+  <v-layout fill-height d-flex>
+    <div
+      style="position: relative;"
+      fill-height
+      v-if="~viewAvailable.indexOf('surface')"
+      :class="$style.outline"
+    >
+      <surface-view :layoutChange="change"/>
+    </div>
+    <div
+      style="position: relative;"
+      fill-height
+      v-if="~viewAvailable.indexOf('sub-surface')"
+      :class="$style.outline"
+    >
+      <sub-surface-view :layoutChange="change"/>
+    </div>
+  </v-layout>
+</v-content>

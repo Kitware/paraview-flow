@@ -1,0 +1,46 @@
+.logo {
+  height: 40px;
+  padding-right: 10px;
+}
+
+.progress {
+  left: 0;
+  margin: 0 !important;
+  padding: 0;
+  position: absolute !important;
+  right: 0;
+  top: 0;
+}
+
+.thinBorder {
+  border: solid #ccc 1px;
+  box-shadow: none;
+}
+
+.noSelect {
+  user-select: none;
+}
+
+.drawerButton {
+  position: relative;
+  width: 45px;
+}
+
+.drawerButton :global .v-badge__badge {
+  right: -20px;
+}
+
+.spread {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.viewToolbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+}

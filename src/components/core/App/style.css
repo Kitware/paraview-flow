@@ -1,0 +1,4 @@
+/* set vuetify-specific wrapper to contain our overlay */
+:global(.content--wrap) {
+  position: relative;
+}

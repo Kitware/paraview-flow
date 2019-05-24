@@ -1,0 +1,24 @@
+language: node_js
+os: linux
+sudo: required
+dist: trusty
+group: travis_lts
+addons:
+  chrome: stable
+node_js:
+  - '8'
+install:
+  - npm ci
+notifications:
+  email:
+    recipients:
+      - sebastien.jourdain@kitware.com
+    on_success: change
+    on_failure: always
+
+cache:
+  directories:
+    - "$HOME/.npm"
+
+script:
+  - if [ "$TRAVIS_EVENT_TYPE" == "push" ] && [ "$TRAVIS_BRANCH" == "master" ]; then .ci-travis-release.sh; fi
