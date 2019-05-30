@@ -21,4 +21,4 @@ cache:
     - "$HOME/.npm"
 
 script:
-  - if [ "$TRAVIS_EVENT_TYPE" == "push" ] && [ "$TRAVIS_BRANCH" == "master" ]; then .ci-travis-release.sh; fi
+  - if [ "$TRAVIS_EVENT_TYPE" == "push" ] && [ "$TRAVIS_BRANCH" == "master" ]; then ./.ci-travis-release.sh; fi
