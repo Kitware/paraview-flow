@@ -149,5 +149,8 @@ export default {
     FLOW_UPDATE_COLOR_MODE({ dispatch }, { name, value }) {
       dispatch('PVW_UPDATE_COLOR_MODE', { name, value });
     },
+    FLOW_RESCALE_COLOR({ dispatch }, name) {
+      dispatch('PVW_RESCALE_COLOR', name);
+    },
   },
 };

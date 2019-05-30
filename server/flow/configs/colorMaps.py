@@ -17,7 +17,7 @@ FIELDS = {
     'mask',
     'permeability',
     'porosity',
-    'pressure',
+    # 'pressure', # No rescale for pressure
     'saturation',
     'specific storage',
   ],
@@ -214,3 +214,13 @@ def applyColorMode(typeName, value):
     lut = simple.GetColorTransferFunction(field)
     print('AutomaticRescaleRangeMode', field, value)
     lut.AutomaticRescaleRangeMode = value
+
+
+def rescaleColor(typeName, rep):
+  fieldName = rep.ColorArrayName[1]
+  print('rescaleColor', typeName, fieldName)
+  if fieldName in FIELDS[typeName]:
+    # lut = simple.GetColorTransferFunction(fieldName)
+    # lut.RescaleTransferFunction(1, 2)
+    rep.RescaleTransferFunctionToDataRange(False, True)
+

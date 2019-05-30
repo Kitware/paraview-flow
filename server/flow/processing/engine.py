@@ -1,7 +1,7 @@
 import os, time, json
 
 import flow.plugins
-from flow.configs.colorMaps import applyColorMap, applyColorMode
+from flow.configs.colorMaps import applyColorMap, applyColorMode, rescaleColor
 from flow.processing.utils import histToArray
 
 from paraview import simple, servermanager
@@ -121,9 +121,13 @@ class FlowEngine(object):
 
 
   def rescaleColorRange(self, name):
-    if name == 'surface':
-      self.surfaceRepresentation.RescaleTransferFunctionToDataRange(False, True)
-      print('rescale')
+    rep = None
+    if str(name) == 'surface':
+      rep = self.surfaceRepresentation
+    if str(name) == 'subsurface':
+      rep = self.subSurfaceRepresentation
 
-    if name == 'subsurface':
-      self.subSurfaceRepresentation.RescaleTransferFunctionToDataRange(False, True)
+    if rep:
+      rep.Input.MarkDirty(rep)
+      rep.Input.UpdatePipeline(self.time)
+      rescaleColor(name, rep)

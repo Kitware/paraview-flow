@@ -22,7 +22,6 @@ export default {
       client: 'NETWORK_CLIENT',
       state: 'FLOW_SURFACE',
       colorModes: 'FLOW_COLOR_MODES',
-      colorMode: 'FLOW_COLOR_MODE_SURFACE',
     }),
     colorMode: {
       get() {
@@ -41,7 +40,7 @@ export default {
     ...mapActions({
       resetCamera: 'PVW_RESET_CAMERA',
       updateColorBy: 'FLOW_UPDATE_COLOR',
-      colorRescale: 'PVW_RESCALE_COLOR',
+      colorRescale: 'FLOW_RESCALE_COLOR',
     }),
     activateColorMode(e) {
       this.colorMode = Number(e.currentTarget.dataset.value);

@@ -23,14 +23,18 @@ export default {
       state: 'FLOW_SUBSURFACE',
       voi: 'FLOW_VOI',
       sliceIdx: 'FLOW_SLICE_IDX',
+      colorModes: 'FLOW_COLOR_MODES',
     }),
-    rescaleMode: {
+    colorMode: {
       get() {
-        return this.$store.getters.FLOW_SUBSURFACE_RESCALE_MODE;
+        return this.$store.getters.FLOW_COLOR_MODE_SUBSURFACE;
       },
-      set(v) {
-        this.$store.commit('FLOW_SUBSURFACE_RESCALE_MODE_SET', v);
-        this.$store.dispatch('FLOW_UPDATE_RESCALE_MODE');
+      set(value) {
+        this.$store.commit('FLOW_COLOR_MODE_SUBSURFACE_SET', value);
+        this.$store.dispatch('FLOW_UPDATE_COLOR_MODE', {
+          name: 'subsurface',
+          value,
+        });
       },
     },
   },
@@ -39,6 +43,10 @@ export default {
       resetCamera: 'PVW_RESET_CAMERA',
       updateColorBy: 'FLOW_UPDATE_COLOR',
       updateSliceIdx: 'FLOW_UPDATE_SLICE',
+      colorRescale: 'FLOW_RESCALE_COLOR',
     }),
+    activateColorMode(e) {
+      this.colorMode = Number(e.currentTarget.dataset.value);
+    },
   },
 };

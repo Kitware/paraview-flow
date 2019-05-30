@@ -72,5 +72,6 @@ class FlowProtocol(pv_protocols.ParaViewWebProtocol):
 
   @exportRpc("flow.color.rescale")
   def rescaleColor(self, name):
+    print('name', name);
     self.flowEngine.rescaleColorRange(name)
     self.getApplication().InvokeEvent('UpdateEvent')

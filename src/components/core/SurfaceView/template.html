@@ -1,5 +1,9 @@
 <div :class="$style.spread">
-  <vtk-view :client="client" :viewId="state.view" :sizeChange="layoutChange" />
+  <vtk-view
+    :client="client"
+    :viewId="state.view"
+    :sizeChange="layoutChange"
+  />
 
   <v-layout class="mx-4 my-2" align-center :class="$style.viewToolbar">
     <v-select
