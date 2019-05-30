@@ -5,6 +5,10 @@
     "type": "git",
     "url": "https://github.com/kitware/paraview-flow.git"
   },
+  "files": [
+    "dist/**",
+    "server/**"
+  ],
   "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/kitware/paraview-flow/issues"
