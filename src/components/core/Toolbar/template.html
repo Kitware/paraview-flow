@@ -38,8 +38,12 @@
 
   <v-tooltip bottom>
     <template v-slot:activator="{ on }">
-      <v-layout v-on="on" style="max-width: 260px;" align-center>
+      <v-layout v-on="on" style="max-width: 300px;" align-center>
         <v-icon class="mx-1">{{ $vuetify.icons.time }}</v-icon>
+        <v-btn icon @click="togglePlay">
+          <v-icon v-if="lastFrame">{{ $vuetify.icons.first }}</v-icon>
+          <v-icon v-if="!lastFrame">{{ playing ? $vuetify.icons.pause : $vuetify.icons.play }}</v-icon>
+        </v-btn>
         <v-slider
           :value="time"
           @input="updateTime"
@@ -60,7 +64,7 @@
           @input="updateTime"
 
           hide-details
-          class="text-xs-center mx-1"
+          class="text-xs-center ml-4 mr-1"
         />
       </v-layout>
     </template>

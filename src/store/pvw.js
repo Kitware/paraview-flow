@@ -13,6 +13,16 @@ export default {
     },
   },
   actions: {
+    PVW_SETUP({ commit }, client) {
+      commit('PVW_CLIENT_SET', client);
+      // Attach listeners
+      client.Flow.onAnimationState(([state]) => {
+        if (!state.playing) {
+          commit('FLOW_PLAYING_SET', state.playing);
+        }
+        commit('FLOW_TIME_SET', state.time);
+      });
+    },
     PVW_STATE({ state }) {
       return state.client.Flow.getState();
     },
@@ -39,6 +49,9 @@ export default {
     },
     PVW_UPDATE_WATER_TABLE_SCALING({ state }, scale) {
       return state.client.Flow.updateWaterTableDepthScaling(scale);
+    },
+    PVW_UPDATE_TIME_ANIMATION({ state }, animate) {
+      return state.client.Flow.updateTimeAnimation(animate);
     },
   },
 };

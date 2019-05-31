@@ -22,9 +22,13 @@ export default {
       timeMin: 'FLOW_TIME_FIRST',
       timeMax: 'FLOW_TIME_LAST',
       waterTableDepthScaling: 'FLOW_WATER_TABLE_SCALING',
+      playing: 'FLOW_PLAYING',
     }),
     waterTableDepth() {
       return ~this.viewAvailable.indexOf('water-table-depth');
+    },
+    lastFrame() {
+      return this.time === this.timeMax;
     },
   },
   watch: {
@@ -39,6 +43,14 @@ export default {
     ...mapActions({
       updateTime: 'FLOW_UPDATE_TIME',
       updateWaterTableDepthScaling: 'FLOW_UPDATE_WATER_TABLE_SCALING',
+      updatePlaying: 'FLOW_UPDATE_TIME_ANIMATION',
     }),
+    togglePlay() {
+      if (this.lastFrame) {
+        this.updateTime(this.timeMin);
+      } else {
+        this.updatePlaying(!this.playing);
+      }
+    },
   },
 };

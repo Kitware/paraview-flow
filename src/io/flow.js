@@ -14,5 +14,9 @@ export default function createMethods(session) {
       session.call('flow.water.table.show', [visibility]),
     updateWaterTableDepthScaling: (scale) =>
       session.call('flow.water.table.scale', [Number(scale)]),
+    updateTimeAnimation: (playing) =>
+      session.call('flow.time.animation.set', [playing]),
+    onAnimationState: (callback) =>
+      session.subscribe('flow.animation.state', callback),
   };
 }

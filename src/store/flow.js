@@ -163,5 +163,9 @@ export default {
       commit('FLOW_WATER_TABLE_SCALING_SET', scale);
       dispatch('PVW_UPDATE_WATER_TABLE_SCALING', scale);
     },
+    FLOW_UPDATE_TIME_ANIMATION({ commit, dispatch }, animate) {
+      commit('FLOW_PLAYING_SET', animate);
+      dispatch('PVW_UPDATE_TIME_ANIMATION', animate);
+    },
   },
 };

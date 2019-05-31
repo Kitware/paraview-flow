@@ -28,7 +28,7 @@ export default {
     },
   },
   actions: {
-    NETWORK_CONNECT({ commit, state }) {
+    NETWORK_CONNECT({ commit, dispatch, state }) {
       const { config, client } = state;
       if (client && client.isConnected()) {
         client.disconnect();
@@ -69,7 +69,7 @@ export default {
       clientToConnect
         .connect(config)
         .then((validClient) => {
-          commit('PVW_CLIENT_SET', validClient.getRemote());
+          dispatch('PVW_SETUP', validClient.getRemote());
           commit('NETWORK_CLIENT_SET', validClient);
 
           // Done being busy

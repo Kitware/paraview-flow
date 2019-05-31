@@ -40,6 +40,9 @@ Vue.use(Vuetify, {
     unselected: 'mdi-radiobox-blank',
     rescaleColor: 'mdi-ruler',
     scaling: 'mdi-magnify',
+    play: 'mdi-play',
+    pause: 'mdi-pause',
+    first: 'mdi-skip-previous',
   },
 });
 

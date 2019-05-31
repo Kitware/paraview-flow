@@ -15,6 +15,7 @@ class FlowProtocol(pv_protocols.ParaViewWebProtocol):
 
   def __init__(self, filepath = '.', **kwargs):
     super(FlowProtocol, self).__init__()
+    self.playing = False
     self.flowEngine = FlowEngine(filepath)
 
   @exportRpc("pv.flow.state.get")
@@ -81,7 +82,39 @@ class FlowProtocol(pv_protocols.ParaViewWebProtocol):
     self.flowEngine.showWaterTableDepth(visibility)
     self.getApplication().InvokeEvent('UpdateEvent')
 
+
   @exportRpc("flow.water.table.scale")
   def updateWaterTableDepthScaling(self, scale):
     self.flowEngine.updateWaterTableDepthScaling(scale)
     self.getApplication().InvokeEvent('UpdateEvent')
+
+
+  def nextTime(self):
+    if not self.playing:
+      return
+
+    currentTime = self.flowEngine.time
+    newTime = self.flowEngine.gotToNextTime()
+
+    self.playing = currentTime != newTime
+    if self.playing:
+      self.flowEngine.render()
+      reactor.callLater(0.1, lambda: self.nextTime())
+
+    self.publish('flow.animation.state', {
+      'time': newTime,
+      'playing': self.playing,
+    })
+
+    if not self.playing:
+      self.updateTimeAnimation(False)
+
+
+  @exportRpc("flow.time.animation.set")
+  def updateTimeAnimation(self, playing):
+    self.playing = playing
+    if playing:
+      self.getApplication().InvokeEvent('StartInteractionEvent')
+      self.nextTime()
+    else:
+      self.getApplication().InvokeEvent('EndInteractionEvent')

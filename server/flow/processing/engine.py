@@ -80,6 +80,7 @@ class FlowEngine(object):
     self.viewSubSurface.CenterOfRotation = self.viewSubSurface.CameraFocalPoint
 
     self.animationScene = simple.GetAnimationScene()
+    self.animationScene.UpdateAnimationUsingDataTimeSteps()
 
 
   def getState(self):
@@ -100,6 +101,10 @@ class FlowEngine(object):
         'field': str(self.subSurfaceRepresentation.ColorArrayName[1]),
       },
     }
+
+  def render(self):
+    simple.Render(self.viewSurface)
+    simple.Render(self.viewSubSurface)
 
 
   def colorBy(self, representation, field):
@@ -129,8 +134,9 @@ class FlowEngine(object):
 
 
   def setTime(self, time):
+    self.animationScene.AnimationTime = self.animationScene.TimeKeeper.Time
     self.animationScene.AnimationTime = time
-    self.time = float(self.animationScene.AnimationTime)
+    self.time = float(time)
     return self.animationScene.AnimationTime
 
 
@@ -175,3 +181,9 @@ class FlowEngine(object):
   def updateWaterTableDepthScaling(self, scale):
     self.waterTableDepthGlyph.ScaleFactor = float(scale)
     self.waterTableDepthGlyph.GlyphType.Radius = 125.0 / float(scale)
+
+
+  def gotToNextTime(self):
+    self.animationScene.GoToNext()
+    self.time = self.animationScene.TimeKeeper.Time
+    return self.time
