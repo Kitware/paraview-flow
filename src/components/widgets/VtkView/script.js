@@ -28,6 +28,7 @@ export default {
   created() {
     // eslint-disable-next-line
     this.view = vtkRemoteView.newInstance({ rpcWheelEvent: 'flow.zoom.wheel' });
+    this.view.setInteractiveRatio(1); // Force full resolution even HiDPI screen
   },
   mounted() {
     this.view.setContainer(this.$el);
