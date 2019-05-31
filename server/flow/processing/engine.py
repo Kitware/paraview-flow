@@ -31,7 +31,28 @@ class FlowEngine(object):
     self.viewSubSurface.InteractionMode = '2D'
     self.viewSubSurface.CameraParallelProjection = 1
 
-    self.reader = simple.ParFlowReader(FileName=filepath, DeflectTerrain=0)
+    self.reader = simple.ParFlowReader(FileName=filepath, DeflectTerrain=1)
+
+    # Water table depth
+    self.waterTableDepth = simple.WaterTableDepth(
+      Subsurface=simple.OutputPort(self.reader,0),
+      Surface=simple.OutputPort(self.reader,1)
+    )
+    self.cellCenter = simple.CellCenters(Input=self.waterTableDepth)
+    self.waterTableDepthGlyph = simple.Glyph(
+      Input = self.cellCenter,
+      GlyphType = 'Cylinder',
+      ScaleFactor = 100,
+      GlyphMode = 'All Points',
+      GlyphTransform = 'Transform2',
+      ScaleArray = ['POINTS', 'water table depth'],
+    )
+    self.waterTableDepthGlyph.GlyphTransform.Rotate = [90.0, 0.0, 0.0]
+    self.waterTableDepthGlyph.GlyphType.Resolution = 12
+    self.waterTableDepthGlyph.GlyphType.Radius = 0.25
+    self.waterTableRepresentation = simple.Show(self.waterTableDepthGlyph, self.viewSubSurface)
+    self.waterTableRepresentation.Visibility = 0
+
 
     self.surfaceRepresentation = simple.Show(simple.OutputPort(self.reader, 1), self.viewSurface)
     self.surfaceRepresentation.SetScalarBarVisibility(self.viewSurface, True)
@@ -131,3 +152,18 @@ class FlowEngine(object):
       rep.Input.MarkDirty(rep)
       rep.Input.UpdatePipeline(self.time)
       rescaleColor(name, rep)
+
+  def showWaterTableDepth(self, visibility):
+    if visibility:
+      self.waterTableRepresentation.Visibility = 1
+      self.viewSubSurface.InteractionMode = '3D'
+      self.viewSubSurface.CameraParallelProjection = 0
+    else:
+      self.waterTableRepresentation.Visibility = 0
+      self.viewSubSurface.InteractionMode = '2D'
+      self.viewSubSurface.CameraParallelProjection = 1
+      self.viewSubSurface.CameraFocalPoint = [0, 0, 0]
+      self.viewSubSurface.CameraPosition = [0, 0, 1]
+      self.viewSubSurface.CameraViewUp = [0, 1, 0]
+      simple.ResetCamera(self.viewSubSurface)
+      self.viewSubSurface.CenterOfRotation = self.viewSubSurface.CameraFocalPoint

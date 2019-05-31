@@ -22,6 +22,14 @@ export default {
       timeMin: 'FLOW_TIME_FIRST',
       timeMax: 'FLOW_TIME_LAST',
     }),
+    waterTableDepth() {
+      return ~this.viewAvailable.indexOf('water-table-depth');
+    },
+  },
+  watch: {
+    waterTableDepth(v) {
+      this.$store.dispatch('PVW_SHOW_WATER_TABLE_DEPTH', v);
+    },
   },
   methods: {
     ...mapMutations({

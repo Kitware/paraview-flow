@@ -10,5 +10,7 @@ export default function createMethods(session) {
     updateColorMode: (name, value) =>
       session.call('flow.color.mode.update', [name, value]),
     rescaleColor: (name) => session.call('flow.color.rescale', [name]),
+    showWaterTableDepth: (visibility) =>
+      session.call('flow.water.table.show', [visibility]),
   };
 }

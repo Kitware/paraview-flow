@@ -65,16 +65,16 @@
       <span>Sub-Surface</span>
     </v-tooltip>
     <v-tooltip bottom>
-      <template v-slot:activator="{ on }" value="water-table">
-        <v-btn flat v-on="on">
+      <template v-slot:activator="{ on }">
+        <v-btn flat v-on="on" value="water-table-depth">
           <v-icon>{{ $vuetify.icons.waterTable }}</v-icon>
         </v-btn>
       </template>
-      <span>Water table</span>
+      <span>Water table depth</span>
     </v-tooltip>
     <v-tooltip bottom>
-      <template v-slot:activator="{ on }" value="water-balance">
-        <v-btn flat v-on="on">
+      <template v-slot:activator="{ on }">
+        <v-btn flat v-on="on" value="water-balance">
           <v-icon>{{ $vuetify.icons.waterBalance }}</v-icon>
         </v-btn>
       </template>

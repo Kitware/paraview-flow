@@ -34,5 +34,8 @@ export default {
     PVW_UPDATE_COLOR_MODE({ state }, { name, value }) {
       return state.client.Flow.updateColorMode(name, value);
     },
+    PVW_SHOW_WATER_TABLE_DEPTH({ state }, visibility) {
+      return state.client.Flow.showWaterTableDepth(visibility);
+    },
   },
 };
