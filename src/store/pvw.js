@@ -37,5 +37,8 @@ export default {
     PVW_SHOW_WATER_TABLE_DEPTH({ state }, visibility) {
       return state.client.Flow.showWaterTableDepth(visibility);
     },
+    PVW_UPDATE_WATER_TABLE_SCALING({ state }, scale) {
+      return state.client.Flow.updateWaterTableDepthScaling(scale);
+    },
   },
 };

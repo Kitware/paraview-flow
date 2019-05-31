@@ -39,13 +39,18 @@ class FlowEngine(object):
       Surface=simple.OutputPort(self.reader,1)
     )
     self.cellCenter = simple.CellCenters(Input=self.waterTableDepth)
+    self.wtdVectCalc = simple.Calculator(Input=self.cellCenter)
+    self.wtdVectCalc.ResultArrayName = 'wtdVect'
+    self.wtdVectCalc.Function = 'iHat + jHat + kHat * water table depth'
+
     self.waterTableDepthGlyph = simple.Glyph(
-      Input = self.cellCenter,
+      Input = self.wtdVectCalc,
       GlyphType = 'Cylinder',
-      ScaleFactor = 100,
+      ScaleFactor = 500,
       GlyphMode = 'All Points',
       GlyphTransform = 'Transform2',
-      ScaleArray = ['POINTS', 'water table depth'],
+      ScaleArray = ['POINTS', 'wtdVect'],
+      VectorScaleMode = 'Scale by Components',
     )
     self.waterTableDepthGlyph.GlyphTransform.Rotate = [90.0, 0.0, 0.0]
     self.waterTableDepthGlyph.GlyphType.Resolution = 12
@@ -64,7 +69,6 @@ class FlowEngine(object):
     self.subSurfaceRepresentation = simple.Show(self.extractSubset, self.viewSubSurface)
     # simple.ColorBy(self.subSurfaceRepresentation, ['CELLS', 'saturation'])
     self.subSurfaceRepresentation.Representation = 'Surface'
-
 
 
     simple.Render(self.viewSurface)
@@ -167,3 +171,7 @@ class FlowEngine(object):
       self.viewSubSurface.CameraViewUp = [0, 1, 0]
       simple.ResetCamera(self.viewSubSurface)
       self.viewSubSurface.CenterOfRotation = self.viewSubSurface.CameraFocalPoint
+
+  def updateWaterTableDepthScaling(self, scale):
+    self.waterTableDepthGlyph.ScaleFactor = float(scale)
+    self.waterTableDepthGlyph.GlyphType.Radius = 125.0 / float(scale)

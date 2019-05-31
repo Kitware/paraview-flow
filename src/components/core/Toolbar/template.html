@@ -13,31 +13,59 @@
     height="3"
   />
 
-  <v-icon>{{ $vuetify.icons.time }}</v-icon>
-  <v-slider
-    :value="time"
-    @input="updateTime"
-    :min="timeMin"
-    :max="timeMax"
-    step="1"
+  <v-tooltip bottom v-if="waterTableDepth">
+    <template v-slot:activator="{ on }">
+      <v-layout v-on="on" style="max-width: 180px;" align-center>
+        <v-icon class="mx-1">{{ $vuetify.icons.scaling }}</v-icon>
+        <v-text-field
+          label="Water table scaling"
+          type="number"
+          :min="20"
+          :max="2000"
+          step="1"
 
-    hide-details
-    class="mx-2"
-    style="max-width: 200px;"
-  />
-   <v-text-field
-    type="number"
-    :min="timeMin"
-    :max="timeMax"
-    step="1"
+          :value="waterTableDepthScaling"
+          @input="updateWaterTableDepthScaling"
 
-    :value="time"
-    @input="updateTime"
+          hide-details
+          class="text-xs-center mr-2"
+        />
+        <v-divider vertical class="mx-2"/>
+      </v-layout>
+    </template>
+    <span>Adjust Water table depth scaling</span>
+  </v-tooltip>
 
-    hide-details
-    class="text-xs-center mx-1"
-    style="max-width: 40px;"
-  />
+  <v-tooltip bottom>
+    <template v-slot:activator="{ on }">
+      <v-layout v-on="on" style="max-width: 260px;" align-center>
+        <v-icon class="mx-1">{{ $vuetify.icons.time }}</v-icon>
+        <v-slider
+          :value="time"
+          @input="updateTime"
+          :min="timeMin"
+          :max="timeMax"
+          step="1"
+
+          hide-details
+          class="mx-2"
+        />
+         <v-text-field
+          type="number"
+          :min="timeMin"
+          :max="timeMax"
+          step="1"
+
+          :value="time"
+          @input="updateTime"
+
+          hide-details
+          class="text-xs-center mx-1"
+        />
+      </v-layout>
+    </template>
+    <span>Timestep</span>
+  </v-tooltip>
 
   <v-btn-toggle
     :value="viewAvailable"

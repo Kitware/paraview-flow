@@ -21,6 +21,7 @@ export default {
       time: 'FLOW_TIME',
       timeMin: 'FLOW_TIME_FIRST',
       timeMax: 'FLOW_TIME_LAST',
+      waterTableDepthScaling: 'FLOW_WATER_TABLE_SCALING',
     }),
     waterTableDepth() {
       return ~this.viewAvailable.indexOf('water-table-depth');
@@ -37,6 +38,7 @@ export default {
     }),
     ...mapActions({
       updateTime: 'FLOW_UPDATE_TIME',
+      updateWaterTableDepthScaling: 'FLOW_UPDATE_WATER_TABLE_SCALING',
     }),
   },
 };

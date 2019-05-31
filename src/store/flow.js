@@ -16,6 +16,7 @@ export default {
     ],
     colorModeSurface: -1,
     colorModeSubSurface: -1,
+    waterTableDepthScaling: 500,
   },
   getters: {
     FLOW_PLAYING(state) {
@@ -54,6 +55,9 @@ export default {
     FLOW_COLOR_MODE_SUBSURFACE(state) {
       return state.colorModeSubSurface;
     },
+    FLOW_WATER_TABLE_SCALING(state) {
+      return state.waterTableDepthScaling;
+    },
   },
   mutations: {
     FLOW_PLAYING_SET(state, value) {
@@ -85,6 +89,9 @@ export default {
     },
     FLOW_COLOR_MODE_SUBSURFACE_SET(state, value) {
       state.colorModeSubSurface = value;
+    },
+    FLOW_WATER_TABLE_SCALING_SET(state, value) {
+      state.waterTableDepthScaling = value;
     },
   },
   actions: {
@@ -151,6 +158,10 @@ export default {
     },
     FLOW_RESCALE_COLOR({ dispatch }, name) {
       dispatch('PVW_RESCALE_COLOR', name);
+    },
+    FLOW_UPDATE_WATER_TABLE_SCALING({ commit, dispatch }, scale) {
+      commit('FLOW_WATER_TABLE_SCALING_SET', scale);
+      dispatch('PVW_UPDATE_WATER_TABLE_SCALING', scale);
     },
   },
 };

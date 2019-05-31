@@ -80,3 +80,8 @@ class FlowProtocol(pv_protocols.ParaViewWebProtocol):
   def showWaterTableDepth(self, visibility):
     self.flowEngine.showWaterTableDepth(visibility)
     self.getApplication().InvokeEvent('UpdateEvent')
+
+  @exportRpc("flow.water.table.scale")
+  def updateWaterTableDepthScaling(self, scale):
+    self.flowEngine.updateWaterTableDepthScaling(scale)
+    self.getApplication().InvokeEvent('UpdateEvent')

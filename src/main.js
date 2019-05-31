@@ -39,6 +39,7 @@ Vue.use(Vuetify, {
     selected: 'mdi-radiobox-marked',
     unselected: 'mdi-radiobox-blank',
     rescaleColor: 'mdi-ruler',
+    scaling: 'mdi-magnify',
   },
 });
 
