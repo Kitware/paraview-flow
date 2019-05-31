@@ -48,6 +48,7 @@ export default {
     colorModeSurface: -1,
     colorModeSubSurface: -1,
     waterTableDepthScaling: 500,
+    waterBalance: null,
   },
   getters: {
     FLOW_PLAYING(state) {
@@ -89,6 +90,9 @@ export default {
     FLOW_WATER_TABLE_SCALING(state) {
       return state.waterTableDepthScaling;
     },
+    FLOW_WATER_BALANCE(state) {
+      return state.waterBalance;
+    },
   },
   mutations: {
     FLOW_PLAYING_SET(state, value) {
@@ -123,6 +127,9 @@ export default {
     },
     FLOW_WATER_TABLE_SCALING_SET(state, value) {
       state.waterTableDepthScaling = value;
+    },
+    FLOW_WATER_BALANCE_SET(state, value) {
+      state.waterBalance = value;
     },
   },
   actions: {
@@ -201,6 +208,13 @@ export default {
     FLOW_UPDATE_TIME_ANIMATION({ commit, dispatch }, animate) {
       commit('FLOW_PLAYING_SET', animate);
       dispatch('PVW_UPDATE_TIME_ANIMATION', animate);
+    },
+    FLOW_FETCH_WATER_BALANCE({ state, commit, dispatch }) {
+      if (!state.waterBalance) {
+        dispatch('PVW_WATER_BALANCE').then((wb) => {
+          commit('FLOW_WATER_BALANCE_SET', wb);
+        });
+      }
     },
   },
 };

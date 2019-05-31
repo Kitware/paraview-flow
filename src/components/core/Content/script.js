@@ -2,6 +2,7 @@ import { mapGetters } from 'vuex';
 
 import SubSurfaceView from 'paraview-flow/src/components/core/SubSurfaceView';
 import SurfaceView from 'paraview-flow/src/components/core/SurfaceView';
+import WaterTableView from 'paraview-flow/src/components/core/WaterTableView';
 
 import { connectImageStream } from 'vtk.js/Sources/Rendering/Misc/RemoteView';
 
@@ -14,6 +15,7 @@ export default {
   components: {
     SubSurfaceView,
     SurfaceView,
+    WaterTableView,
   },
   data() {
     return {
@@ -25,6 +27,9 @@ export default {
       client: 'NETWORK_CLIENT',
       viewAvailable: 'UI_VIEW_AVAILABLE',
     }),
+    showWaterBalance() {
+      return ~this.viewAvailable.indexOf('water-balance');
+    },
   },
   mounted() {
     if (this.client) {

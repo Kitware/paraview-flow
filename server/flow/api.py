@@ -94,7 +94,7 @@ class FlowProtocol(pv_protocols.ParaViewWebProtocol):
       return
 
     currentTime = self.flowEngine.time
-    newTime = self.flowEngine.gotToNextTime()
+    newTime = self.flowEngine.goToNextTime()
 
     self.playing = currentTime != newTime
     if self.playing:
@@ -118,3 +118,7 @@ class FlowProtocol(pv_protocols.ParaViewWebProtocol):
       self.nextTime()
     else:
       self.getApplication().InvokeEvent('EndInteractionEvent')
+
+  @exportRpc("flow.water.balance.get")
+  def getGlobalTimeWaterBalance(self):
+    return self.flowEngine.getGlobalTimeWaterBalance()

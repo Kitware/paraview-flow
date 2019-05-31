@@ -16,6 +16,8 @@ export default function createMethods(session) {
       session.call('flow.water.table.scale', [Number(scale)]),
     updateTimeAnimation: (playing) =>
       session.call('flow.time.animation.set', [playing]),
+    getGlobalTimeWaterBalance: () => session.call('flow.water.balance.get', []),
+
     onAnimationState: (callback) =>
       session.subscribe('flow.animation.state', callback),
   };

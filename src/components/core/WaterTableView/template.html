@@ -1,0 +1,32 @@
+<v-layout v-resize="onResize">
+  <chart
+    :idx="time"
+    :style="{ width: `${chartWidth}px` }"
+    :class="$style.thinBorder"
+    title="Surface Storage"
+    :bins="surfaceStorage"
+    normalize
+    :height="chartHeight"
+    :width="chartWidth"
+  />
+  <chart
+    :idx="time"
+    :style="{ width: `${chartWidth}px` }"
+    :class="$style.thinBorder"
+    title="Subsurface Storage"
+    :bins="subSurfaceStorage"
+    normalize
+    :height="chartHeight"
+    :width="chartWidth"
+  />
+  <chart
+    :idx="time"
+    :style="{ width: `${chartWidth}px` }"
+    :class="$style.thinBorder"
+    title="Surface run-off"
+    :bins="surfaceRunOff"
+    normalize
+    :height="chartHeight"
+    :width="chartWidth"
+  />
+</v-layout>

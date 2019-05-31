@@ -53,5 +53,8 @@ export default {
     PVW_UPDATE_TIME_ANIMATION({ state }, animate) {
       return state.client.Flow.updateTimeAnimation(animate);
     },
+    PVW_WATER_BALANCE({ state }) {
+      return state.client.Flow.getGlobalTimeWaterBalance();
+    },
   },
 };

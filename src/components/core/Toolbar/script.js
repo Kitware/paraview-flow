@@ -27,6 +27,9 @@ export default {
     waterTableDepth() {
       return ~this.viewAvailable.indexOf('water-table-depth');
     },
+    showWaterBalance() {
+      return ~this.viewAvailable.indexOf('water-balance');
+    },
     lastFrame() {
       return this.time === this.timeMax;
     },
@@ -34,6 +37,11 @@ export default {
   watch: {
     waterTableDepth(v) {
       this.$store.dispatch('PVW_SHOW_WATER_TABLE_DEPTH', v);
+    },
+    showWaterBalance(v) {
+      if (v) {
+        this.$store.dispatch('FLOW_FETCH_WATER_BALANCE');
+      }
     },
   },
   methods: {

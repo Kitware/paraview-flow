@@ -12,11 +12,11 @@ class FlowEngine(object):
 
   def __init__(self, filepath = '.'):
     self.filepath = filepath
-
     self.time = 0.0
     self.surfaceColorMode = 0 # Local range
     self.subSurfaceColorMode = 0 # Local range
 
+    # Surface View
     self.viewSurface = simple.CreateRenderView(True)
     self.viewSurface.EnableRenderOnInteraction = 0
     self.viewSurface.OrientationAxesVisibility = 0
@@ -24,6 +24,7 @@ class FlowEngine(object):
     self.viewSurface.InteractionMode = '2D'
     self.viewSurface.CameraParallelProjection = 1
 
+    # SubSurface view
     self.viewSubSurface = simple.CreateRenderView(True)
     self.viewSubSurface.EnableRenderOnInteraction = 0
     self.viewSubSurface.OrientationAxesVisibility = 0
@@ -31,12 +32,15 @@ class FlowEngine(object):
     self.viewSubSurface.InteractionMode = '2D'
     self.viewSubSurface.CameraParallelProjection = 1
 
+    # Read dataset
     self.reader = simple.ParFlowReader(FileName=filepath, DeflectTerrain=1)
+    self.readerSurface = simple.OutputPort(self.reader,1)
+    self.readerSubSurface = simple.OutputPort(self.reader,0)
 
     # Water table depth
     self.waterTableDepth = simple.WaterTableDepth(
-      Subsurface=simple.OutputPort(self.reader,0),
-      Surface=simple.OutputPort(self.reader,1)
+      Subsurface=self.readerSubSurface,
+      Surface=self.readerSurface
     )
     self.cellCenter = simple.CellCenters(Input=self.waterTableDepth)
     self.wtdVectCalc = simple.Calculator(Input=self.cellCenter)
@@ -58,27 +62,33 @@ class FlowEngine(object):
     self.waterTableRepresentation = simple.Show(self.waterTableDepthGlyph, self.viewSubSurface)
     self.waterTableRepresentation.Visibility = 0
 
+    # Water balance
+    self.waterBalance = simple.WaterBalance(
+      Subsurface=self.readerSubSurface,
+      Surface=self.readerSurface
+    )
+    self.waterBalanceOverTime = simple.PlotGlobalVariablesOverTime(Input=self.waterBalance)
 
-    self.surfaceRepresentation = simple.Show(simple.OutputPort(self.reader, 1), self.viewSurface)
+    # Surface representation
+    self.surfaceRepresentation = simple.Show(self.readerSurface, self.viewSurface)
     self.surfaceRepresentation.SetScalarBarVisibility(self.viewSurface, True)
-    # self.subSurfaceRepresentation = simple.Show(simple.OutputPort(self.reader, 0), self.viewSubSurface)
 
+    # SubSurface representation + slice extract
     self.reader.UpdatePipeline()
     self.voi = self.reader.GetClientSideObject().GetOutputDataObject(0).GetExtent()
-    self.extractSubset = simple.ExtractSubset(Input=simple.OutputPort(self.reader, 0))
+    self.extractSubset = simple.ExtractSubset(Input=self.readerSubSurface)
     self.subSurfaceRepresentation = simple.Show(self.extractSubset, self.viewSubSurface)
-    # simple.ColorBy(self.subSurfaceRepresentation, ['CELLS', 'saturation'])
     self.subSurfaceRepresentation.Representation = 'Surface'
 
-
+    # Reset camera + center of rotation
     simple.Render(self.viewSurface)
     simple.ResetCamera(self.viewSurface)
     self.viewSurface.CenterOfRotation = self.viewSurface.CameraFocalPoint
-
     simple.Render(self.viewSubSurface)
     simple.ResetCamera(self.viewSubSurface)
     self.viewSubSurface.CenterOfRotation = self.viewSubSurface.CameraFocalPoint
 
+    # Time management
     self.animationScene = simple.GetAnimationScene()
     self.animationScene.UpdateAnimationUsingDataTimeSteps()
 
@@ -183,7 +193,23 @@ class FlowEngine(object):
     self.waterTableDepthGlyph.GlyphType.Radius = 125.0 / float(scale)
 
 
-  def gotToNextTime(self):
+  def goToNextTime(self):
     self.animationScene.GoToNext()
     self.time = self.animationScene.TimeKeeper.Time
     return self.time
+
+
+  def getGlobalTimeWaterBalance(self):
+    self.waterBalanceOverTime.UpdatePipeline();
+    table = self.waterBalanceOverTime.GetClientSideObject().GetOutputDataObject(0)
+    fields = ['subsurface storage', 'surface runoff', 'surface storage']
+    result = {}
+    for field in fields:
+      jsonList = []
+      result[field] = jsonList
+      array = table.GetColumnByName(field)
+      size = array.GetNumberOfTuples()
+      for i in range(size):
+        jsonList.append(array.GetTuple1(i))
+
+    return result
