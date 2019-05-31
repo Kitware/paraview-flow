@@ -150,31 +150,35 @@ export default {
       commit('FLOW_SLICE_IDX_SET', sliceIdx);
       debounceSlice(dispatch, sliceIdx);
     },
-    FLOW_TIME_NEXT({ getters, dispatch }) {
+    FLOW_TIME_NEXT({ getters, commit, dispatch }) {
       const cTime = getters.FLOW_TIME;
       const lastTime = getters.FLOW_TIME_LAST;
       if (cTime < lastTime) {
+        commit('FLOW_TIME_SET', cTime + 1);
         debounceUpdateTime(dispatch, cTime + 1);
       }
     },
-    FLOW_TIME_PREVIOUS({ getters, dispatch }) {
+    FLOW_TIME_PREVIOUS({ getters, commit, dispatch }) {
       const cTime = getters.FLOW_TIME;
       const firstTime = getters.FLOW_TIME_FIRST;
       if (cTime > firstTime) {
+        commit('FLOW_TIME_SET', cTime - 1);
         debounceUpdateTime(dispatch, cTime - 1);
       }
     },
-    FLOW_LAYER_UP({ getters, dispatch }) {
+    FLOW_LAYER_UP({ getters, commit, dispatch }) {
       const idx = getters.FLOW_SLICE_IDX;
       const max = getters.FLOW_VOI[5] - 1;
       if (idx < max) {
+        commit('FLOW_SLICE_IDX_SET', idx + 1);
         debounceSlice(dispatch, idx + 1);
       }
     },
-    FLOW_LAYER_DOWN({ getters, dispatch }) {
+    FLOW_LAYER_DOWN({ getters, commit, dispatch }) {
       const idx = getters.FLOW_SLICE_IDX;
       const min = getters.FLOW_VOI[4];
       if (idx > min) {
+        commit('FLOW_SLICE_IDX_SET', idx - 1);
         debounceSlice(dispatch, idx - 1);
       }
     },
