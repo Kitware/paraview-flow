@@ -1,3 +1,34 @@
+function networkDebounce(pvwAction) {
+  let pendingRequest = 0;
+  let lastArgs = null;
+  function debounce(dispatch, args) {
+    pendingRequest++;
+    lastArgs = args;
+    if (pendingRequest === 1) {
+      return dispatch(pvwAction, lastArgs)
+        .then(() => {
+          pendingRequest--;
+          if (pendingRequest) {
+            pendingRequest = 0;
+            return debounce(dispatch, lastArgs);
+          }
+        })
+        .catch(() => {
+          pendingRequest = 0;
+        });
+    }
+  }
+  return debounce;
+}
+
+// ----------------------------------------------------------------------------
+
+const debounceUpdateTime = networkDebounce('PVW_TIME_UPDATE');
+const debounceSlice = networkDebounce('PVW_EXTRACT_SLICE');
+const debounceGlyphScale = networkDebounce('PVW_UPDATE_WATER_TABLE_SCALING');
+
+// ----------------------------------------------------------------------------
+
 export default {
   state: {
     playing: false,
@@ -113,38 +144,38 @@ export default {
     },
     FLOW_UPDATE_TIME({ commit, dispatch }, time) {
       commit('FLOW_TIME_SET', Number(time));
-      dispatch('PVW_TIME_UPDATE', Number(time));
+      debounceUpdateTime(dispatch, Number(time));
     },
     FLOW_UPDATE_SLICE({ commit, dispatch }, sliceIdx) {
       commit('FLOW_SLICE_IDX_SET', sliceIdx);
-      dispatch('PVW_EXTRACT_SLICE', sliceIdx);
+      debounceSlice(dispatch, sliceIdx);
     },
     FLOW_TIME_NEXT({ getters, dispatch }) {
       const cTime = getters.FLOW_TIME;
       const lastTime = getters.FLOW_TIME_LAST;
       if (cTime < lastTime) {
-        dispatch('FLOW_UPDATE_TIME', cTime + 1);
+        debounceUpdateTime(dispatch, cTime + 1);
       }
     },
     FLOW_TIME_PREVIOUS({ getters, dispatch }) {
       const cTime = getters.FLOW_TIME;
       const firstTime = getters.FLOW_TIME_FIRST;
       if (cTime > firstTime) {
-        dispatch('FLOW_UPDATE_TIME', cTime - 1);
+        debounceUpdateTime(dispatch, cTime - 1);
       }
     },
     FLOW_LAYER_UP({ getters, dispatch }) {
       const idx = getters.FLOW_SLICE_IDX;
       const max = getters.FLOW_VOI[5] - 1;
       if (idx < max) {
-        dispatch('FLOW_UPDATE_SLICE', idx + 1);
+        debounceSlice(dispatch, idx + 1);
       }
     },
     FLOW_LAYER_DOWN({ getters, dispatch }) {
       const idx = getters.FLOW_SLICE_IDX;
       const min = getters.FLOW_VOI[4];
       if (idx > min) {
-        dispatch('FLOW_UPDATE_SLICE', idx - 1);
+        debounceSlice(dispatch, idx - 1);
       }
     },
     FLOW_UPDATE_RESCALE_MODE({ getters, dispatch }) {
@@ -161,7 +192,7 @@ export default {
     },
     FLOW_UPDATE_WATER_TABLE_SCALING({ commit, dispatch }, scale) {
       commit('FLOW_WATER_TABLE_SCALING_SET', scale);
-      dispatch('PVW_UPDATE_WATER_TABLE_SCALING', scale);
+      debounceGlyphScale(dispatch, scale);
     },
     FLOW_UPDATE_TIME_ANIMATION({ commit, dispatch }, animate) {
       commit('FLOW_PLAYING_SET', animate);

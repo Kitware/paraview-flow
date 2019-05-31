@@ -20,7 +20,7 @@
     <v-slider
       :label="`Layer ${voi[5] - sliceIdx}`"
       :value="sliceIdx"
-      @change="updateSliceIdx"
+      @input="updateSliceIdx"
 
       :min="voi[4]"
       :max="voi[5] - 1"
