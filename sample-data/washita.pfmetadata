@@ -1,0 +1,320 @@
+{
+  "parflow": {
+    "build": {
+		  "version": "v3.3.1-6-gb7ce690",
+      "compiled" : "Jul 16 2018 13:27:44"
+    }
+  },
+  "domains": {
+    "surface": {
+      "cell-extent": [41, 41], "spacing": [1000, 1000, 2], "origin": [0, 0, 0],
+      "subgrid-divisions": [[0, 41], [0, 41]]
+    },
+    "subsurface": {
+      "cell-extent": [41, 41, 50], "spacing": [1000, 1000, 2], "origin": [0, 0, 0],
+      "subgrid-divisions": [[0, 41], [0, 41], [0, 50]]
+    }
+  },
+  "inputs": {
+    "script": {
+      "type": "tcl",
+      "file": "Outputs/LW.tcl"
+    },
+    "elevation": {
+      "type": "pfb",
+      "place": "cell",
+      "domain": "surface",
+      "data": [
+        { "file": "parflow_input/LW.dem.pfb" }
+      ]
+    },
+    "indicator": {
+      "type": "pfb",
+      "place": "cell",
+      "domain": "subsurface",
+      "indirection": {
+        "type": "integer lookup",
+        "map": "Geom.Perm.Names",
+        "key_prefix": "GeomInput",
+        "value_prefix": "Geom"
+      },
+      "data": [
+        { "file": "Outputs/IndicatorFile_Gleeson.50z.pfb" }
+      ]
+    },
+    "slope": {
+      "type": "pfb",
+      "place": "cell",
+      "domain": "surface",
+      "data": [
+        { "file": "Outputs/LW.slopex.pfb", "component": "x" },
+        { "file": "Outputs/LW.slopey.pfb", "component": "y" }
+      ]
+    },
+    "mask": {
+      "type": "pfb",
+      "place": "cell",
+      "domain": "subsurface",
+      "data": [
+        { "file": "Outputs/LW.out.mask.pfb" }
+      ]
+    },
+    "precipitation rate": {
+      "type": "pfb 2d timeseries",
+      "place": "cell",
+      "domain": "surface",
+      "units": "mm/s",
+      "data": [
+        { "file-series": "NLDAS/NLDAS.APCP.%06d_to_%06d.pfb", "times-between": [1, 120, 24] }
+      ]
+    },
+    "downward longwave radiation": {
+      "type": "pfb 2d timeseries",
+      "place": "cell",
+      "domain": "surface",
+      "units": "W/m^2",
+      "data": [
+        { "file-series": "NLDAS/NLDAS.DLWR.%06d_to_%06d.pfb", "times-between": [1, 120, 24] }
+      ]
+    },
+    "downward shortwave radiation": {
+      "type": "pfb 2d timeseries",
+      "place": "cell",
+      "domain": "surface",
+      "units": "W/m^2",
+      "data": [
+        { "file-series": "NLDAS/NLDAS.DSWR.%06d_to_%06d.pfb", "times-between": [1, 120, 24] }
+      ]
+    },
+    "atmospheric pressure": {
+      "type": "pfb 2d timeseries",
+      "place": "cell",
+      "domain": "surface",
+      "units": "Pa",
+      "data": [
+        { "file-series": "NLDAS/NLDAS.Press.%06d_to_%06d.pfb", "times-between": [1, 120, 24] }
+      ]
+    },
+    "water-vapor specific humidity": {
+      "type": "pfb 2d timeseries",
+      "place": "cell",
+      "domain": "surface",
+      "units": "1",
+      "data": [
+        { "file-series": "NLDAS/NLDAS.SPFH.%06d_to_%06d.pfb", "times-between": [1, 120, 24] }
+      ]
+    },
+    "air temperature": {
+      "type": "pfb 2d timeseries",
+      "place": "cell",
+      "domain": "surface",
+      "units": "K",
+      "data": [
+        { "file-series": "NLDAS/NLDAS.Temp.%06d_to_%06d.pfb", "times-between": [1, 120, 24] }
+      ]
+    },
+    "wind velocity": {
+      "type": "pfb 2d timeseries",
+      "place": "cell",
+      "domain": "surface",
+      "units": "m/s",
+      "data": [
+        { "file-series": "NLDAS/NLDAS.UGRD.%06d_to_%06d.pfb", "times-between": [1, 120, 24], "component": "x" },
+        { "file-series": "NLDAS/NLDAS.VGRD.%06d_to_%06d.pfb", "times-between": [1, 120, 24], "component": "y" }
+      ]
+    },
+    "clm model": {
+      "type": "clm model",
+      "data": [
+        { "file": "Outputs/drv_clmin.dat" }
+      ]
+    },
+    "clm vegetation parameters": {
+      "type": "clm vegp",
+      "data": [
+        { "file": "Outputs/drv_vegp.dat" }
+      ]
+    },
+    "clm vegetation distribution": {
+      "type": "clm vegm",
+      "place": "cell",
+      "data": [
+        { "file": "Outputs/drv_vegm.alluv.dat" }
+      ]
+    },
+    "configuration": {
+      "type": "pfidb",
+      "data": [
+        { "file": "Outputs/LW.pfidb" }
+      ]
+    }
+  },
+  "outputs": {
+    "logs": {
+      "kinsol": "Outputs/LW.out.kinsol.log",
+      "parflow": "Outputs/LW.out.log",
+      "console": "Outputs/LW.out.txt",
+      "clm log": "Outputs/CLM.out.clm.log",
+      "clm console": "Outputs/clm_out.txt.0",
+      "clm debug": "Outputs/clm_output.txt.0",
+      "clm summary": "Outputs/clm_para_out.txt.0"
+    },
+    "solution": {
+      "latent heat flux (total)": {
+        "type": "pfb",
+        "place": "cell",
+        "domain": "surface",
+        "units": "W/m^2",
+        "time-varying": true,
+        "data": [
+          { "file-series": "Outputs/LW.out.eflx_lh_tot.%05d.pfb", "time-range": [1, 72] }
+        ]
+      },
+      "longwave radiation out": {
+        "type": "pfb",
+        "place": "cell",
+        "domain": "surface",
+        "units": "W/m^2",
+        "time-varying": true,
+        "data": [
+          { "file-series": "Outputs/LW.out.eflx_lwrad_out.%05d.pfb", "time-range": [1, 72] }
+        ]
+      },
+      "sensible heat (total)": {
+        "type": "pfb",
+        "place": "cell",
+        "domain": "surface",
+        "units": "W/m^2",
+        "time-varying": true,
+        "data": [
+          { "file-series": "Outputs/LW.out.eflx_sh_tot.%05d.pfb", "time-range": [1, 72] }
+        ]
+      },
+      "ground heat flux": {
+        "type": "pfb",
+        "place": "cell",
+        "domain": "surface",
+        "units": "W/m^2",
+        "time-varying": true,
+        "data": [
+          { "file-series": "Outputs/LW.out.eflx_soil_grnd.%05d.pfb", "time-range": [1, 72] }
+        ]
+      },
+      "pressure": {
+        "type": "pfb",
+        "place": "cell",
+        "domain": "subsurface",
+        "time-varying": true,
+        "data": [
+          { "file-series": "Outputs/LW.out.press.%05d.pfb", "time-range": [0, 72, 24] }
+        ]
+      },
+      "ground evaporation without condensation": {
+        "type": "pfb",
+        "place": "cell",
+        "domain": "surface",
+        "units": "mm/s",
+        "time-varying": true,
+        "data": [
+          { "file-series": "Outputs/LW.out.qflx_evap_grnd.%05d.pfb", "time-range": [1, 72] }
+        ]
+      },
+      "soil evaporation": {
+        "type": "pfb",
+        "place": "cell",
+        "domain": "surface",
+        "units": "mm/s",
+        "time-varying": true,
+        "data": [
+          { "file-series": "Outputs/LW.out.qflx_evap_soi.%05d.pfb", "time-range": [1, 72] }
+        ]
+      },
+      "total evaporation": {
+        "type": "pfb",
+        "place": "cell",
+        "domain": "surface",
+        "units": "mm/s",
+        "time-varying": true,
+        "data": [
+          { "file-series": "Outputs/LW.out.qflx_evap_tot.%05d.pfb", "time-range": [1, 72] }
+        ]
+      },
+      "vegetation evaporation": {
+        "type": "pfb",
+        "place": "cell",
+        "domain": "surface",
+        "units": "mm/s",
+        "time-varying": true,
+        "data": [
+          { "file-series": "Outputs/LW.out.qflx_evap_veg.%05d.pfb", "time-range": [1, 72] }
+        ]
+      },
+      "soil infiltration": {
+        "type": "pfb",
+        "place": "cell",
+        "domain": "surface",
+        "units": "mm/s",
+        "time-varying": true,
+        "data": [
+          { "file-series": "Outputs/LW.out.qflx_infl.%05d.pfb", "time-range": [1, 72] }
+        ]
+      },
+      "vegetation transpiration": {
+        "type": "pfb",
+        "place": "cell",
+        "domain": "surface",
+        "units": "mm/s",
+        "time-varying": true,
+        "data": [
+          { "file-series": "Outputs/LW.out.qflx_tran_veg.%05d.pfb", "time-range": [1, 72] }
+        ]
+      },
+      "saturation": {
+        "type": "pfb",
+        "place": "cell",
+        "domain": "subsurface",
+        "time-varying": true,
+        "data": [
+          { "file-series": "Outputs/LW.out.satur.%05d.pfb", "time-range": [0, 72, 24] }
+        ]
+      },
+      "snow water equivalent": {
+        "type": "pfb",
+        "place": "cell",
+        "domain": "surface",
+        "units": "mm",
+        "time-varying": true,
+        "data": [
+          { "file-series": "Outputs/LW.out.swe_out.%05d.pfb", "time-range": [1, 72] }
+        ]
+      },
+      "ground surface temperature": {
+        "type": "pfb",
+        "place": "cell",
+        "domain": "surface",
+        "units": "K",
+        "time-varying": true,
+        "data": [
+          { "file-series": "Outputs/LW.out.t_grnd.%05d.pfb", "time-range": [1, 72] }
+        ]
+      },
+      "soil temperature": {
+        "type": "pfb",
+        "place": "cell",
+        "domain": "surface",
+        "units": "mm",
+        "time-varying": true,
+        "data": [
+          { "file-series": "Outputs/LW.out.t_soil.%05d.pfb", "time-range": [1, 72] }
+        ]
+      },
+      "clm daily restart": {
+        "type": "clm restart",
+        "domain": "surface",
+        "data": [
+          { "file-series": "Outputs/clm.rst.%05d.0", "time-range": [24, 72, 24] }
+        ]
+      }
+    }
+  }
+}
